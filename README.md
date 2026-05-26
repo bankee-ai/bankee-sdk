@@ -1,3 +1,5 @@
+![bankee.ai](logo.png)
+
 # Bankee SDK
 
 > Connect any smart device to every major payment network via a single integration.
