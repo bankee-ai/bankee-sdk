@@ -2,43 +2,47 @@
 
 # Bankee SDK
 
-> Connect any smart device to every major payment network via a single integration.
+> Scaffold for connecting a smart device to payment rails through one integration surface.
 
-The Bankee SDK abstracts the complexity of multi-rail payment infrastructure, giving device manufacturers one elegant integration that unlocks Wero, Open Banking, Agentic Protocols, Stablecoins, CBDCs, and traditional cards simultaneously.
+Wallet Bridge runs end to end on partner test systems today. No real money moves yet. A limited EUR to Alipay pilot is planned for early 2027, subject to a licensed partner and regulatory approval.
+
+This repository does not move money. Payment and protocol handlers in the tree are placeholders.
 
 ## Supported Payment Rails
 
 | Protocol | Status | Description |
 |----------|--------|-------------|
-| Wero / APMs | ✅ Live | European instant payments, 43M+ users |
-| Open Banking | ✅ Live | A2A transfers via 2,000+ banks (Yapily) |
-| Visa / Mastercard | ✅ Live | Traditional card networks |
-| Google AP2 | ✅ Integrated | Agent Payments Protocol |
-| Coinbase x402 | ✅ Integrated | HTTP-native machine payments |
-| Stripe MPP | ✅ Integrated | Machine Payments Protocol |
-| OpenAI ACP | ✅ Integrated | Agentic Commerce Protocol |
-| A2A | ✅ Integrated | Agent-to-Agent communication |
-| Digital Euro (CBDC) | 🗺 Roadmap | Central Bank Digital Currency |
+| Wero / APMs | Sandbox / test | European instant payments on partner test systems |
+| Open Banking | Sandbox / test | Account-to-account transfers on partner test systems |
+| Visa / Mastercard | Sandbox / test | Card payments on partner test systems |
+| Google AP2 | Planned | Agent Payments Protocol. No working implementation in this repo |
+| Coinbase x402 | Planned | HTTP-native machine payments. No working implementation in this repo |
+| MPP | Planned | Machine Payments Protocol. No working implementation in this repo |
+| OpenAI ACP | Planned | Agentic Commerce Protocol. No working implementation in this repo |
+| A2A | Planned | Agent-to-agent communication. No working implementation in this repo |
+| Digital Euro (CBDC) | Planned | Central bank digital currency |
+
+`Sandbox / test` matches Wallet Bridge on partner test systems. It does not mean this repository can execute that rail. `Planned` means this repository has no working implementation (handlers are stubs, or the referenced protocol files are absent).
 
 ## Installation
 
-```bash
-npm install @bankee/sdk
-# or
-yarn add @bankee/sdk
-```
+`@bankee/sdk` is not published to npm. There is no supported install command.
+
+Installing from this repository does not work either. The tree has no `package.json`, and `src/index.ts` imports `./sdk`, which is not present. The TypeScript sources are a scaffold for review.
 
 ## Quick Start
+
+The samples below describe the intended API. They do not run against a published package, and they do not move money.
 
 ```typescript
 import { BankeeSDK } from '@bankee/sdk';
 
 const bankee = new BankeeSDK({
   apiKey: process.env.BANKEE_API_KEY,
-  environment: 'production', // or 'sandbox'
+  environment: 'sandbox',
 });
 
-// Accept a payment via any available rail
+// Prefer a rail. Execution is not implemented in this repository.
 const payment = await bankee.payments.create({
   amount: 1000, // in minor units (£10.00)
   currency: 'GBP',
@@ -54,11 +58,14 @@ const payment = await bankee.payments.create({
 ## Agentic Payments
 
 ```typescript
-import { BankeeSDK, AgentPayment } from '@bankee/sdk';
+import { BankeeSDK } from '@bankee/sdk';
 
-const bankee = new BankeeSDK({ apiKey: process.env.BANKEE_API_KEY });
+const bankee = new BankeeSDK({
+  apiKey: process.env.BANKEE_API_KEY,
+  environment: 'sandbox',
+});
 
-// Configure an AI agent to trigger payments autonomously
+// Intended shape only. Protocol handlers in this repo are not implemented.
 const agentPayment = await bankee.agentic.createPayment({
   protocol: 'ap2',       // Google AP2, x402, mpp, or acp
   amount: 500,
@@ -94,25 +101,26 @@ const agentPayment = await bankee.agentic.createPayment({
    └─────────┘  └──────────┘  └───────────┘
 ```
 
+The diagram is the intended shape. Routing in this repository selects a rail label and does not settle a payment.
+
 ## Device Support
 
 - **NFC** — contactless payments on any NFC-enabled device
 - **BLE** — Bluetooth Low Energy for proximity payments
 - **Secure Element** — hardware-backed key storage and cryptographic operations
-- **APDU** — Application Protocol Data Unit handling for EMV compliance
+- **APDU** — Application Protocol Data Unit command and response handling
 
 Supported form factors: phones, smartwatches, wearables, smart rings, IoT devices, any NFC-capable hardware.
 
-## Protocol Integrations
+## Protocol notes
 
-See [`bankee-ai/protocol-integrations`](https://github.com/bankee-ai/protocol-integrations) for reference implementations and guides for each supported protocol.
+See [`bankee-ai/protocol-integrations`](https://github.com/bankee-ai/protocol-integrations) for separate notes on these protocols. Working protocol handlers are not in this repository.
 
 ## Compliance
 
-- PSD2 / PSD3 compliant
+Wallet Bridge runs end to end on partner test systems today. No real money moves yet. A limited EUR to Alipay pilot is planned for early 2027, subject to a licensed partner and regulatory approval.
+
 - GDPR compliant
-- EMV Level 1 & 2 certified
-- Authorised via Yapily (FCA registered)
 - Bank-level AES-256 encryption
 
 ## Documentation
@@ -127,4 +135,4 @@ Full documentation, API reference, and integration guides: [docs.bankee.ai](http
 
 ## License
 
-Proprietary — © 2025 Bankee Payment Solutions Ltd. SDK reference implementations in `/examples` are MIT licensed.
+Proprietary — © 2025 Bankee Technologies OÜ. SDK reference implementations in `/examples` are MIT licensed.
